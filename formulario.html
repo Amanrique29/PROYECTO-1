@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div class="titulos">
+            <h1>Workout of the Day</h1>
+            <h2>Find out the most adapted exercises for you!</h2>
+        </div>
+        <div class="botonesheader">
+            <a href="mainweb.html"><strong> Main site</strong></a>
+            <a href="formulario.html"><strong> WOD</strong></a>
+            <a href="aboutus.html"><strong> About Us</strong></a>
+            <a href="#"><strong> Equipment</strong></a>
+            <a href="#"><strong> Events</strong></a>
+            <a href="#"><strong>Subscribe</strong></a>
+
+        </div>
+    </header>
+    <main>
+        <h2 class="aboutus">Athlete Data</h2>
+        <form>
+            <fieldset class="formulario">Date of Birth:
+                <input type="date" id="fecha" > Weight (kg): <input type="text" id="peso" > Height (cm): <input
+                    type="text" id="altura" >
+            </fieldset>
+            <fieldset>
+                Any physical condition or injury? 
+                <input type="radio" name="uno" id="lesion-si" onclick="aviso()"/> <label for="lesion-si">Yes</label>
+                <input type="radio" name="uno" id="lesion-no" /> <label for="lesion-no">No</label>
+            </fieldset>
+            <fieldset class="ejercicios">
+                <div>
+                    <h3>EXERCISE 1</h3>
+                    <div id="ejrandomuno"></div>
+                    <button type="button" onclick="activarEjuno()" disabled id="activaruno">Pick</button>
+                </div>
+                <div>
+                    <h3>EXERCISE 2</h3>
+                    <div id="ejrandomdos"></div>
+                    <button type="button" onclick="activarEjdos()" disabled id="activardos">Pick</button>
+                </div>
+                <div>
+                    <h3>EXERCISE 3</h3>
+                    <div id="ejrandomtres"></div>
+                    <button type="button" onclick="activarEjtres()" disabled id="activartres">Pick</button>
+                </div>
+            </fieldset>
+            <input type="reset" />
+            <button onclick="mostrarInfo(event)">Send</button>
+            <div id="iraficha"></div>
+        </form>
+    </main>
+    <footer>
+        <div>
+            <p><a href="mainweb.html">Main site</a></p>
+            <p><a href="formulario.html">WOD</a></p>
+            <p><a href="aboutus.html">About Us</a></p>
+            <p><a href="#">Equipment</a></p>
+            <p><a href="#">Events</a></p>
+        </div>
+        <div>
+            <p><a href="#">David Thompson</a></p>
+            <p><a href="#">Amy Smith-Clarke</a></p>
+            <p><a href="#">Manuel Santos</a></p>
+            <p><a href="#">Alexandra García</a></p>
+        </div>
+        <div>
+            <ul>Adress:
+                <li>Alameda Urquijo 32</li>
+                <li>48001</li>
+                <li>Bilbao (Bizkaia)</li>
+            </ul>
+            <ul> Contact Us:
+                <li>Phone: xxx xxx 654</li>
+                <li>Fax: xxx xxx 721</li>
+                <li>E-mail: contact@mydomain.com</li>
+            </ul>
+        </div>
+    </footer>
+    <script>
+        function aviso() {
+                window.alert('Rest is part of the practise. Consult a doctor before trying this.');
+        }
+        let suma = [];
+        let pagina = 1;
+        equis(pagina)
+        function equis(pagina) {
+            fetch(`https://wger.de/api/v2/exercise/?format=json&page=${pagina}`).then(
+                function allex(parteuno) {
+                    return parteuno.json();
+                }
+            ).then(
+                function partone(partuno) {
+                    suma.push(partuno.results);
+                    if (partuno.next !== "https://wger.de/api/v2/exercise/?format=json&page=9") {
+                        pagina++;
+                        equis(pagina)
+                    } else {
+                        document.getElementById("activaruno").disabled = false;
+                        document.getElementById("activardos").disabled = false;
+                        document.getElementById("activartres").disabled = false;
+                    }
+                    // else, coger botones por su id y poner disabled a false
+                }
+            )
+        }
+        console.log(suma);
+        let aleatorio;
+        let exId;
+        let lang;
+        let exName;
+        let descrip;
+        document.getElementById("ejrandomuno").innerHTML = "";
+        function activarEjuno() {
+            aleatorio = suma[Math.floor(Math.random() * 7)][Math.floor(Math.random() * 19)];
+            exId = aleatorio.id;
+            lang = aleatorio.language;
+            exName = aleatorio.name;
+            descrip = aleatorio.description;
+            if (lang == 2 && exName !== "" && exName !== exdosName && exName !== extresName) {
+                document.getElementById("ejrandomuno").innerHTML = `<p>${exName}</p>`;
+            } else {
+                activarEjuno()
+            }
+
+        }
+        let aleatorioDos;
+        let exdosId;
+        let langdos;
+        let exdosName;
+        let descripdos;
+        document.getElementById("ejrandomdos").innerHTML = "";
+        function activarEjdos() {
+            aleatorioDos = suma[Math.floor(Math.random() * 7)][Math.floor(Math.random() * 19)];
+            exdosId = aleatorioDos.id;
+            langdos = aleatorioDos.language;
+            exdosName = aleatorioDos.name;
+            descripdos = aleatorioDos.description;
+            if (langdos == 2 && exdosName !== "" && exdosName !== exName && exdosName !== extresName) {
+
+                document.getElementById("ejrandomdos").innerHTML = `<p>${exdosName}</p>`;
+            } else {
+                activarEjdos()
+            }
+
+        }
+        let aleatoriotres;
+        let extresId;
+        let langtres;
+        let extresName;
+        let descriptres;
+        document.getElementById("ejrandomtres").innerHTML = "";
+        function activarEjtres() {
+            aleatoriotres = suma[Math.floor(Math.random() * 7)][Math.floor(Math.random() * 19)];
+            extresId = aleatoriotres.id;
+            langtres = aleatoriotres.language;
+            extresName = aleatoriotres.name;
+            descriptres = aleatoriotres.description;
+            if (langtres == 2 && extresName !== "" && extresName !== exdosName && extresName !== exName) {
+
+                document.getElementById("ejrandomtres").innerHTML = `<p>${extresName}</p>`;
+            } else {
+                activarEjtres()
+            }
+        }
+
+        function mostrarInfo(event) {
+            event.preventDefault();
+            let fechaNac = document.getElementById("fecha").value;
+            let pesoKg = document.getElementById("peso").value;
+            let alturaCm = document.getElementById("altura").value;
+            let lesionado = document.getElementById("lesion-si").checked;
+            let listado = JSON.parse(localStorage.getItem('listado'));
+            if (listado === null) {
+                listado = [];
+            }
+            let ficha = {
+                ejerciciouno: exName,
+                descripcionejuno: descrip,
+                ejerciciodos: exdosName,
+                descripcionejdos: descripdos,
+                ejerciciotres: extresName,
+                descripcionejtres: descriptres,
+                fechaNacimiento: fechaNac,
+                peso: pesoKg,
+                altura: alturaCm,
+                lesion : lesionado,
+            }
+            
+            listado.push(ficha);
+            let listadoEnJson = JSON.stringify(listado);
+            localStorage.setItem('listado', listadoEnJson);
+            document.getElementById("iraficha").innerHTML = `<a href="WODficha.html"> Go to your Workout index card</a>`;
+        }
+    </script>
+</body>
+
+</html>

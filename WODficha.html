@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout of the Day</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div class="titulos">
+            <h1>Workout of the Day</h1>
+            <h2>Find out the most adapted exercises for you!</h2>
+        </div>
+        <div class="botonesheader">
+            <a href="mainweb.html"><strong> Main site</strong></a>
+            <a href="formulario.html"><strong> WOD</strong></a>
+            <a href="aboutus.html"><strong> About Us</strong></a>
+            <a href="#"><strong> Equipment</strong></a>
+            <a href="#"><strong> Events</strong></a>
+            <a href="#"><strong>Subscribe</strong></a>
+
+        </div>
+    </header>
+    <div class="favoritos">
+        <div class="volver">
+            <a class="weare" href="formulario.html"> Return to questionnaire</a>
+        </div>
+        <div id="ficha"></div>
+        <hr>
+        <div id="recomendaciones">
+            <div id="advertencia"></div>
+            <div id="consejos"></div>
+        </div>
+    </div>
+    <footer>
+        <div>
+            <p><a href="mainweb.html">Main site</a></p>
+            <p><a href="formulario.html">WOD</a></p>
+            <p><a href="aboutus.html">About Us</a></p>
+            <p><a href="#">Equipment</a></p>
+            <p><a href="#">Events</a></p>
+        </div>
+        <div>
+            <p><a href="#">David Thompson</a></p>
+            <p><a href="#">Amy Smith-Clarke</a></p>
+            <p><a href="#">Manuel Santos</a></p>
+            <p><a href="#">Alexandra García</a></p>
+        </div>
+        <div>
+            <ul>Adress:
+                <li>Alameda Urquijo 32</li>
+                <li>48001</li>
+                <li>Bilbao (Bizkaia)</li>
+            </ul>
+            <ul> Contact Us:
+                <li>Phone: xxx xxx 654</li>
+                <li>Fax: xxx xxx 721</li>
+                <li>E-mail: contact@mydomain.com</li>
+            </ul>
+        </div>
+    </footer>
+    <script>
+        let listado = JSON.parse(localStorage.getItem('listado'));
+        if (listado === null) {
+            listado = [];
+        }
+        let fecha;
+        let milisegundos;
+        let resta;
+        let mayoroMenor;
+        let imc;
+
+        mostrarFicha()
+        function mostrarFicha() {
+            document.getElementById('ficha').innerHTML = `<div class="divs"><h2>${listado[0].ejerciciouno}</h2><p>${listado[0].descripcionejuno}</p></div><div class="divs"><h2>${listado[0].ejerciciodos}</h2><p>${listado[0].descripcionejdos}</p></div><div class="divs"><h2>${listado[0].ejerciciotres}</h2><p>${listado[0].descripcionejtres}</p></div>`;
+
+            imc = parseInt(listado[0].peso / ((listado[0].altura / 100) * (listado[0].altura / 100)));
+            if (imc < 18) {
+                document.getElementById("consejos").innerHTML = `<hr><h2>Advice</h2><h3>Body Mass Index (BMI): ${imc}</h3><p>Your rate is too low. Maybe you need more carbs and proteins. We recommend you this specialist: <a style="color: deepskyblue;" href="https://www.nutricionbilbao.com/servicios/consulta"><strong>Nutrición Bilbao</strong></a> </p>`;
+            } else if (imc < 25) {
+                document.getElementById("consejos").innerHTML = `<hr><h2>Advice</h2><h3>Body Mass Index (BMI): ${imc}</h3><p>Your rate is OK. Keep up the good work!</p>`;
+            } else if (imc < 30) {
+                document.getElementById("consejos").innerHTML = `<hr><h2>Advice</h2><h3>Body Mass Index (BMI): ${imc}</h3><p>Your rate is a bit high, could be great if you choose more endurance workouts for a while.</p>`;
+            } else if (imc > 30) {
+                document.getElementById("consejos").innerHTML = `<hr><h2>Advice</h2><h3>Body Mass Index (BMI): ${imc}</h3><p>Your BMI index is too high, maybe our routine doesn't suit with your physical condition. We recommend you this specialist: <a style="color: deepskyblue;" href="https://www.nutricionbilbao.com/servicios/consulta"><strong>Nutrición Bilbao</strong></a></p>`;
+            }
+
+            let fecha = new Date();
+            milisegundos = 1000 * 60 * 60 * 24 * 6575;
+            resta = fecha.getTime() - milisegundos;
+            mayoroMenor = new Date(resta);
+            fechaUsuario = new Date(listado[0].fechaNacimiento);
+            if (mayoroMenor < fechaUsuario) {
+                document.getElementById("advertencia").innerHTML = `<h3>WARNING</h3><p>We strongly recommend you to be careful with powerlifting exercises. Bodybuilding is a complicated process and maybe you're too young to follow our routines.</p>`;
+            }
+
+        }
+    </script>
+</body>
+
+</html>
